@@ -6,7 +6,7 @@
 
 Node >14.x
 
-## Set env file
+## Setup
 
 - Add an `env.local` file to the root directory
 
