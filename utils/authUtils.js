@@ -1,5 +1,4 @@
 import crypto from "crypto";
-import { v4 as uuidv4 } from "uuid";
 
 /**
  * Base64 encodes a buffer object
@@ -26,25 +25,6 @@ function _sha256(str) {
 }
 
 /**
- * Gets default auth params
- *
- * @param {string} scope
- * @param {string} state
- * @param {string} challenge
- */
-function _getAuthParams(scope, state, challenge) {
-  return {
-    response_type: "code",
-    client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
-    scope: scope,
-    redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI,
-    state: state,
-    code_challenge_method: "S256",
-    code_challenge: challenge,
-  };
-}
-
-/**
  * Util function to set an item to local storage
  *
  * @param {string} name
@@ -59,7 +39,7 @@ function _setItemToStorage(name, item) {
  *
  * @param {string} state
  */
-function _setStateIdToStorage(state) {
+export function setStateIdToStorage(state) {
   _setItemToStorage("state-origin", state);
 }
 
@@ -68,23 +48,47 @@ function _setStateIdToStorage(state) {
  *
  * @param {string} verifier
  */
-function _setVerifierToStorage(verifier) {
+export function setVerifierToStorage(verifier) {
   _setItemToStorage("verifier", verifier);
 }
 
 /**
- * Redirects user to initiate auth flow
+ * Get verifier and challenge for pkce auth
+ *
+ * @returns {{ verifier: string, challenge: string }} verifier and challenge
  */
-export function redirectToAuthorize() {
-  const baseUrl = "https://accounts.spotify.com";
-  const scope = "user-read-private user-read-email";
-  const state = uuidv4(); // ⇨ e.g. '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
+export function getCodeChallenge() {
   const verifier = _base64URLEncode(crypto.randomBytes(32));
   const challenge = _base64URLEncode(_sha256(verifier));
-  const params = _getAuthParams(scope, state, challenge);
-  const query = new URLSearchParams(params).toString();
+  return { verifier, challenge };
+}
+
+/**
+ * Gets default auth params
+ *
+ * @param {string} scope
+ * @param {string} state
+ * @param {string} challenge
+ */
+export function getAuthParams(scope, state, challenge) {
+  return {
+    response_type: "code",
+    client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
+    scope: scope,
+    redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI,
+    state: state,
+    code_challenge_method: "S256",
+    code_challenge: challenge,
+  };
+}
+
+/**
+ * Redirects user to initiate auth flow
+ *
+ * @param {string} query
+ */
+export function redirectToAuthUrl(query) {
+  const baseUrl = "https://accounts.spotify.com";
   const api = baseUrl + "/authorize" + "?" + query;
-  _setStateIdToStorage(state);
-  _setVerifierToStorage(verifier);
   window.location.replace(api);
 }
