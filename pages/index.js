@@ -1,14 +1,26 @@
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Layout from "../components/layout";
 import {
   getAuthParams,
   getCodeChallenge,
   redirectToAuthUrl,
+  setCodeToStorage,
   setStateIdToStorage,
   setVerifierToStorage,
 } from "../utils/authUtils";
 
 export default function Home() {
+  const router = useRouter();
+  useEffect(() => {
+    const query = window.location.search;
+    const code = new URLSearchParams(query).get("code");
+    if (code) {
+      setCodeToStorage(code);
+      router.push("/client");
+    }
+  });
   return (
     <Layout>
       <button
