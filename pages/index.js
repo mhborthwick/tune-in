@@ -5,6 +5,7 @@ import Layout from "../components/layout";
 import {
   getAuthParams,
   getCodeChallenge,
+  getCodeFromQuery,
   redirectToAuthUrl,
   setCodeToStorage,
   setStateIdToStorage,
@@ -14,8 +15,7 @@ import {
 export default function Home() {
   const router = useRouter();
   useEffect(() => {
-    const query = window.location.search;
-    const code = new URLSearchParams(query).get("code");
+    const code = getCodeFromQuery();
     if (code) {
       setCodeToStorage(code);
       router.push("/client");
