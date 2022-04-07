@@ -170,3 +170,13 @@ export async function getTokens(code, verifier) {
   const { access_token, refresh_token } = json;
   return { access_token, refresh_token };
 }
+
+/**
+ * Gets code param query string
+ *
+ * @returns {string}
+ */
+export function getCodeFromQuery() {
+  const query = window.location.search;
+  return new URLSearchParams(query).get("code");
+}
