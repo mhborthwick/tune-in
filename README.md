@@ -1,10 +1,10 @@
-# tbd2
+# Tune In
 
 > Note: This project is currently in development
 
 ## Requirements
 
-Node >14.x
+Node >=16.x
 
 ## Setup
 
