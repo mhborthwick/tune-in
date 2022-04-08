@@ -2,6 +2,10 @@
   "name": "tbd2",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
