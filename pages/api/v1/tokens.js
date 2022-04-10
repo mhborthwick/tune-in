@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getTokens } from "../../../utils/auth";
 
 /**
  * Gets client
@@ -41,7 +40,6 @@ function _getRequestBody(code, verifier) {
  *
  * @param {string} code
  * @param {string} verifier
- * @param {React.MutableRefObject<{access_token: string, refresh_token: string}>} prevTokens
  * @returns tokens
  */
 export async function _getTokens(code, verifier) {
