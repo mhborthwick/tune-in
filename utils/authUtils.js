@@ -25,53 +25,6 @@ function _sha256(str) {
 }
 
 /**
- * Util function to set an item to local storage
- *
- * @param {string} name
- * @param {string} item
- */
-function _setItemToStorage(name, item) {
-  localStorage.setItem(name, item);
-}
-
-/**
- * Sets state to local storage
- *
- * @param {string} state
- */
-export function setStateIdToStorage(state) {
-  _setItemToStorage("state-origin", state);
-}
-
-/**
- * Sets verifier to local storage
- *
- * @param {string} verifier
- */
-export function setVerifierToStorage(verifier) {
-  _setItemToStorage("verifier", verifier);
-}
-
-/**
- * Sets code to local storage
- *
- * @param {string} code
- */
-export function setCodeToStorage(code) {
-  _setItemToStorage("code", code);
-}
-
-/**
- * Get item from local storage
- *
- * @param {string} name
- * @returns {string} item in storage
- */
-export function getItemFromStorage(name) {
-  return localStorage.getItem(name);
-}
-
-/**
  * Get verifier and challenge for pkce auth
  *
  * @returns {{ verifier: string, challenge: string }} verifier and challenge
@@ -155,24 +108,20 @@ function _getRequestBody(code, verifier) {
  * @param {React.MutableRefObject<{access_token: string, refresh_token: string}>} prevTokens
  * @returns tokens
  */
-export async function getTokens(code, verifier, prevTokens) {
-  if (!prevTokens.current.access_token) {
-    const baseUrl = "https://accounts.spotify.com";
-    const endpoint = "/api/token";
-    const auth =
-      process.env.NEXT_PUBLIC_CLIENT_ID +
-      ":" +
-      process.env.NEXT_PUBLIC_CLIENT_SECRET;
-    const api = baseUrl + endpoint;
-    const response = await fetch(api, {
-      ..._getRequestClient(auth),
-      ..._getRequestBody(code, verifier),
-    });
-    const json = await response.json();
-    const { access_token, refresh_token } = json;
-    return { access_token, refresh_token };
-  }
-  const { access_token, refresh_token } = prevTokens.current;
+export async function getTokens(code, verifier) {
+  const baseUrl = "https://accounts.spotify.com";
+  const endpoint = "/api/token";
+  const auth =
+    process.env.NEXT_PUBLIC_CLIENT_ID +
+    ":" +
+    process.env.NEXT_PUBLIC_CLIENT_SECRET;
+  const api = baseUrl + endpoint;
+  const response = await fetch(api, {
+    ..._getRequestClient(auth),
+    ..._getRequestBody(code, verifier),
+  });
+  const json = await response.json();
+  const { access_token, refresh_token } = json;
   return { access_token, refresh_token };
 }
 
