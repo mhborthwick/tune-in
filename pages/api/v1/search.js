@@ -43,6 +43,9 @@ async function _search(accessToken, track) {
   const query = new URLSearchParams(params).toString();
   const api = baseUrl + endpoint + "?" + query;
   const response = await fetch(api, _getRequestInitOptions(accessToken));
+  if (response.status === 401) {
+    //todo - refresh token
+  }
   const data = await response.json();
   return data;
 }
