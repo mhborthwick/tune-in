@@ -1,8 +1,51 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { search } from "../../../lib/spotify";
 
 /**
- * get tokens
+ * Gets query params
+ */
+function _getQueryParams() {
+  return {
+    q: "track:come and play in the milky night",
+    type: "track",
+    include_external: "audio&limit=1",
+  };
+}
+
+/**
+ * Gets request client
+ *
+ * @param {string} accessToken
+ */
+function _getRequestClient(accessToken) {
+  return {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  };
+}
+
+/**
+ * Search for tracks
+ *
+ * @param {string} accessToken
+ * @returns tracks
+ */
+async function _search(accessToken) {
+  const baseUrl = "https://api.spotify.com/";
+  const endpoint = "v1/search";
+  const params = _getQueryParams();
+  const query = new URLSearchParams(params).toString();
+  const api = baseUrl + endpoint + "?" + query;
+  const response = await fetch(api, _getRequestClient(accessToken));
+  const data = await response.json();
+  return data;
+}
+
+/**
+ * Search for tracks
  *
  * @param {NextApiRequest} req
  * @param {NextApiResponse} res
@@ -10,7 +53,7 @@ import { search } from "../../../lib/spotify";
 export default async function handler(req, res) {
   try {
     const { authorization } = req.headers;
-    const results = await search(authorization);
+    const results = await _search(authorization);
     res.status(200).json(results);
   } catch (err) {
     res.status(500).json({ error: "failed to load data" });
