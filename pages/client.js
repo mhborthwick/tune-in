@@ -1,6 +1,11 @@
 import Layout from "../components/layout";
 import { useRef } from "react";
-import { getUserId, getRequestInitOptions, search } from "../lib/spotify";
+import {
+  createPlaylist,
+  getUserId,
+  getRequestInitOptions,
+  search,
+} from "../lib/spotify";
 
 // Temp page to test Spotify API functionality
 // Make sure to access this from the front page
@@ -31,6 +36,20 @@ export default function GetData() {
         }}
       >
         Get User ID
+      </button>
+      <button
+        onClick={async () => {
+          const userIdOptions = await getRequestInitOptions("GET", tokens);
+          const userIdResponse = await getUserId(userIdOptions);
+          const userIdJson = await userIdResponse.json();
+          const data = { id: userIdJson.id };
+          const options = await getRequestInitOptions("POST", tokens, data);
+          const response = await createPlaylist(options);
+          const json = await response.json();
+          console.log(json);
+        }}
+      >
+        Create playlist - Be Careful
       </button>
     </Layout>
   );

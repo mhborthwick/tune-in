@@ -21,8 +21,8 @@ function _getRequestInitOptions(accessToken) {
  * @returns tracks
  */
 async function _getUserId(accessToken) {
-  const baseUrl = "https://api.spotify.com/";
-  const endpoint = "v1/me";
+  const baseUrl = "https://api.spotify.com";
+  const endpoint = "/v1/me";
   const api = baseUrl + endpoint;
   const response = await fetch(api, _getRequestInitOptions(accessToken));
   if (response.status === 401) {
