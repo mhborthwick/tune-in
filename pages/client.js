@@ -1,6 +1,5 @@
 import Layout from "../components/layout";
 import { useRef } from "react";
-import { search } from "../lib/spotify";
 
 // Temp page to test Spotify API functionality
 // Make sure to access this from the front page
@@ -20,8 +19,13 @@ export default function GetData() {
       <button
         onClick={async () => {
           await setTokensRef();
-          const data = await search(tokensRef.current.access_token);
-          console.log(data);
+          const response = await fetch("/api/v1/search", {
+            headers: {
+              authorization: tokensRef.current.access_token,
+            },
+          });
+          const json = await response.json();
+          console.log(json);
         }}
       >
         Search Track
