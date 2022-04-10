@@ -108,35 +108,6 @@ function _getRequestBody(code, verifier) {
  * @param {React.MutableRefObject<{access_token: string, refresh_token: string}>} prevTokens
  * @returns tokens
  */
-// export async function getTokens(code, verifier, prevTokens) {
-//   if (!prevTokens.current.access_token) {
-//     const baseUrl = "https://accounts.spotify.com";
-//     const endpoint = "/api/token";
-//     const auth =
-//       process.env.NEXT_PUBLIC_CLIENT_ID +
-//       ":" +
-//       process.env.NEXT_PUBLIC_CLIENT_SECRET;
-//     const api = baseUrl + endpoint;
-//     const response = await fetch(api, {
-//       ..._getRequestClient(auth),
-//       ..._getRequestBody(code, verifier),
-//     });
-//     const json = await response.json();
-//     const { access_token, refresh_token } = json;
-//     return { access_token, refresh_token };
-//   }
-//   const { access_token, refresh_token } = prevTokens.current;
-//   return { access_token, refresh_token };
-// }
-
-/**
- * Gets tokens for auth
- *
- * @param {string} code
- * @param {string} verifier
- * @param {React.MutableRefObject<{access_token: string, refresh_token: string}>} prevTokens
- * @returns tokens
- */
 export async function getTokens(code, verifier) {
   const baseUrl = "https://accounts.spotify.com";
   const endpoint = "/api/token";
