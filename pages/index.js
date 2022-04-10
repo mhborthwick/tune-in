@@ -7,9 +7,6 @@ import {
   getCodeChallenge,
   getCodeFromQuery,
   redirectToAuthUrl,
-  setCodeToStorage,
-  setStateIdToStorage,
-  setVerifierToStorage,
 } from "../utils/authUtils";
 
 export default function Home() {
@@ -17,7 +14,7 @@ export default function Home() {
   useEffect(() => {
     const code = getCodeFromQuery();
     if (code) {
-      setCodeToStorage(code);
+      document.cookie = `code=${code}`;
       router.push("/client");
     }
   });
@@ -30,8 +27,8 @@ export default function Home() {
           const state = uuidv4(); // ⇨ e.g. '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
           const params = getAuthParams(scope, state, challenge);
           const query = new URLSearchParams(params).toString();
-          setStateIdToStorage(state);
-          setVerifierToStorage(verifier);
+          document.cookie = `state=${state}`;
+          document.cookie = `verifier=${verifier}`;
           redirectToAuthUrl(query);
         }}
       >
