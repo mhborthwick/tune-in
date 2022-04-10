@@ -23,7 +23,8 @@ export default function Home() {
       <button
         onClick={() => {
           const { verifier, challenge } = getCodeChallenge();
-          const scope = "user-read-private user-read-email";
+          const scope =
+            "user-read-private user-read-email playlist-modify-public";
           const state = uuidv4(); // ⇨ e.g. '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
           const params = getAuthParams(scope, state, challenge);
           const query = new URLSearchParams(params).toString();

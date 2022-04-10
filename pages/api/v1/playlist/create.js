@@ -1,31 +1,17 @@
-import { NextApiRequest, NextApiResponse } from "next";
-
-/**
- * Gets query params
- *
- * @param {string} track
- */
-function _getQueryParams(track) {
-  return {
-    q: track,
-    type: "track",
-    include_external: "audio&limit=1",
-  };
-}
-
 /**
  * Gets request init options
  *
  * @param {string} accessToken
  */
-function _getRequestInitOptions(accessToken) {
+function _getRequestInitOptions(accessToken, params) {
   return {
-    method: "GET",
+    method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken}`,
       Accept: "application/json",
       "Content-Type": "application/json",
     },
+    body: JSON.stringify(params),
   };
 }
 
@@ -33,16 +19,16 @@ function _getRequestInitOptions(accessToken) {
  * Search for tracks
  *
  * @param {string} accessToken
- * @param {string} track
  * @returns tracks
  */
-async function _search(accessToken, track) {
+async function _createPlaylist(accessToken, userId, params) {
   const baseUrl = "https://api.spotify.com";
-  const endpoint = "/v1/search";
-  const params = _getQueryParams(track);
-  const query = new URLSearchParams(params).toString();
-  const api = baseUrl + endpoint + "?" + query;
-  const response = await fetch(api, _getRequestInitOptions(accessToken));
+  const endpoint = `/v1/users/${userId}/playlists`;
+  const api = baseUrl + endpoint;
+  const response = await fetch(
+    api,
+    _getRequestInitOptions(accessToken, params)
+  );
   if (response.status === 401) {
     //todo - refresh token
   }
@@ -51,7 +37,7 @@ async function _search(accessToken, track) {
 }
 
 /**
- * Search for tracks
+ * get user id
  *
  * @param {NextApiRequest} req
  * @param {NextApiResponse} res
@@ -59,8 +45,12 @@ async function _search(accessToken, track) {
 export default async function handler(req, res) {
   try {
     const { authorization } = req.headers;
-    const { track } = req.body;
-    const results = await _search(authorization, track);
+    const { id } = req.body;
+    const params = {
+      name: "test 12345",
+      description: "test description",
+    };
+    const results = await _createPlaylist(authorization, id, params);
     res.status(200).json(results);
   } catch (err) {
     res.status(500).json({ error: "failed to load data" });
