@@ -11,7 +11,10 @@ export default function GetData() {
     <Layout>
       <button
         onClick={async () => {
-          const options = await getRequestInitOptions(tokens);
+          const data = {
+            track: "come and play in the milky night",
+          };
+          const options = await getRequestInitOptions(data, "POST", tokens);
           const response = await search(options);
           const json = await response.json();
           console.log(json);
