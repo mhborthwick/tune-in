@@ -2,10 +2,12 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * Gets query params
+ *
+ * @param {string} track
  */
-function _getQueryParams() {
+function _getQueryParams(track) {
   return {
-    q: "track:come and play in the milky night",
+    q: track,
     type: "track",
     include_external: "audio&limit=1",
   };
@@ -31,12 +33,13 @@ function _getRequestInitOptions(accessToken) {
  * Search for tracks
  *
  * @param {string} accessToken
+ * @param {string} track
  * @returns tracks
  */
-async function _search(accessToken) {
+async function _search(accessToken, track) {
   const baseUrl = "https://api.spotify.com/";
   const endpoint = "v1/search";
-  const params = _getQueryParams();
+  const params = _getQueryParams(track);
   const query = new URLSearchParams(params).toString();
   const api = baseUrl + endpoint + "?" + query;
   const response = await fetch(api, _getRequestInitOptions(accessToken));
@@ -53,7 +56,8 @@ async function _search(accessToken) {
 export default async function handler(req, res) {
   try {
     const { authorization } = req.headers;
-    const results = await _search(authorization);
+    const { track } = req.body;
+    const results = await _search(authorization, track);
     res.status(200).json(results);
   } catch (err) {
     res.status(500).json({ error: "failed to load data" });
