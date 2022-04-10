@@ -101,6 +101,16 @@ function _getRequestBody(code, verifier) {
 }
 
 /**
+ * Gets code param query string
+ *
+ * @returns {string}
+ */
+export function getCodeFromQuery() {
+  const query = window.location.search;
+  return new URLSearchParams(query).get("code");
+}
+
+/**
  * Gets tokens for auth
  *
  * @param {string} code
@@ -123,14 +133,4 @@ export async function getTokens(code, verifier) {
   const json = await response.json();
   const { access_token, refresh_token } = json;
   return { access_token, refresh_token };
-}
-
-/**
- * Gets code param query string
- *
- * @returns {string}
- */
-export function getCodeFromQuery() {
-  const query = window.location.search;
-  return new URLSearchParams(query).get("code");
 }

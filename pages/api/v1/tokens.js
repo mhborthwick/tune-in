@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getTokens } from "../../../utils/authUtils";
+import { getTokens } from "../../../utils/auth";
 
 /**
  * get tokens

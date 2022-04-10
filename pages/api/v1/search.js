@@ -12,11 +12,11 @@ function _getQueryParams() {
 }
 
 /**
- * Gets request client
+ * Gets request init options
  *
  * @param {string} accessToken
  */
-function _getRequestClient(accessToken) {
+function _getRequestInitOptions(accessToken) {
   return {
     method: "GET",
     headers: {
@@ -39,7 +39,7 @@ async function _search(accessToken) {
   const params = _getQueryParams();
   const query = new URLSearchParams(params).toString();
   const api = baseUrl + endpoint + "?" + query;
-  const response = await fetch(api, _getRequestClient(accessToken));
+  const response = await fetch(api, _getRequestInitOptions(accessToken));
   const data = await response.json();
   return data;
 }

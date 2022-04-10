@@ -7,7 +7,7 @@ import {
   getCodeChallenge,
   getCodeFromQuery,
   redirectToAuthUrl,
-} from "../utils/authUtils";
+} from "../utils/auth";
 
 export default function Home() {
   const router = useRouter();
