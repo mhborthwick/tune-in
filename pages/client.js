@@ -1,6 +1,6 @@
 import Layout from "../components/layout";
 import { useRef } from "react";
-import { getRequestInitOptions, search } from "../lib/spotify";
+import { getUserId, getRequestInitOptions, search } from "../lib/spotify";
 
 // Temp page to test Spotify API functionality
 // Make sure to access this from the front page
@@ -14,13 +14,23 @@ export default function GetData() {
           const data = {
             track: "come and play in the milky night",
           };
-          const options = await getRequestInitOptions(data, "POST", tokens);
+          const options = await getRequestInitOptions("POST", tokens, data);
           const response = await search(options);
           const json = await response.json();
           console.log(json);
         }}
       >
         Search Track
+      </button>
+      <button
+        onClick={async () => {
+          const options = await getRequestInitOptions("GET", tokens);
+          const response = await getUserId(options);
+          const json = await response.json();
+          console.log(json);
+        }}
+      >
+        Get User ID
       </button>
     </Layout>
   );
