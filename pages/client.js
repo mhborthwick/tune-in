@@ -17,7 +17,7 @@ export default function GetData() {
           };
           const response = await spotifyClient.search(data);
           const json = await response.json();
-          console.log(json);
+          console.log(json.tracks.items[0].uri);
         }}
       >
         Search Track
@@ -45,6 +45,38 @@ export default function GetData() {
         }}
       >
         Create playlist - Be Careful
+      </button>
+      <button
+        onClick={async () => {
+          const getTrackUri = async () => {
+            const data = {
+              track: "come and play in the milky night",
+            };
+            const response = await spotifyClient.search(data);
+            const json = await response.json();
+            return { uris: [json.tracks.items[0].uri] };
+          };
+          const getUserId = async () => {
+            const response = await spotifyClient.getUserId();
+            const json = await response.json();
+            return { id: json.id };
+          };
+          const createPlaylist = async (data) => {
+            const response = await spotifyClient.createPlaylist(data);
+            const json = await response.json();
+            return { id: json.id };
+          };
+          const trackUris = await getTrackUri();
+          const userId = await getUserId();
+          const playlistId = await createPlaylist(userId);
+          const data = { ...trackUris, ...playlistId };
+
+          const response = await spotifyClient.addToPlaylist(data);
+          const json = await response.json();
+          console.log(json);
+        }}
+      >
+        Add to playlist - Be Careful
       </button>
     </Layout>
   );
