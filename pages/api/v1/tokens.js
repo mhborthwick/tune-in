@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 /**
- * Gets client
+ * Gets request init options
  *
  * @param {string} auth
- * @returns client (i.e. method and headers)
+ * @returns request init options (i.e. method and headers)
  */
-function _getRequestClient(auth) {
+function _getRequestInitOptions(auth) {
   return {
     method: "POST",
     headers: {
@@ -51,7 +51,7 @@ export async function _getTokens(code, verifier) {
     process.env.NEXT_PUBLIC_CLIENT_SECRET;
   const api = baseUrl + endpoint;
   const response = await fetch(api, {
-    ..._getRequestClient(auth),
+    ..._getRequestInitOptions(auth),
     ..._getRequestBody(code, verifier),
   });
   const json = await response.json();

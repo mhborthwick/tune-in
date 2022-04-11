@@ -74,11 +74,3 @@ export function getCodeFromQuery() {
   const query = window.location.search;
   return new URLSearchParams(query).get("code");
 }
-
-/**
- * Get tokens
- * @returns tokens
- */
-export async function getTokens() {
-  return await fetch("/api/v1/tokens");
-}
