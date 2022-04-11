@@ -1,17 +1,13 @@
 import Layout from "../components/layout";
 import { useRef } from "react";
-import {
-  createPlaylist,
-  getUserId,
-  getRequestInitOptions,
-  search,
-} from "../lib/spotify";
+import { Spotify } from "../lib/spotify";
 
 // Temp page to test Spotify API functionality
 // Make sure to access this from the front page
 // by clicking Log In to Get Started
 export default function GetData() {
   const tokens = useRef({ access_token: "", refresh_token: "" });
+  const spotifyClient = Spotify.init(tokens);
   return (
     <Layout>
       <button
@@ -19,8 +15,7 @@ export default function GetData() {
           const data = {
             track: "come and play in the milky night",
           };
-          const options = await getRequestInitOptions("POST", tokens, data);
-          const response = await search(options);
+          const response = await spotifyClient.search(data);
           const json = await response.json();
           console.log(json);
         }}
@@ -29,8 +24,7 @@ export default function GetData() {
       </button>
       <button
         onClick={async () => {
-          const options = await getRequestInitOptions("GET", tokens);
-          const response = await getUserId(options);
+          const response = await spotifyClient.getUserId();
           const json = await response.json();
           console.log(json);
         }}
@@ -39,12 +33,13 @@ export default function GetData() {
       </button>
       <button
         onClick={async () => {
-          const userIdOptions = await getRequestInitOptions("GET", tokens);
-          const userIdResponse = await getUserId(userIdOptions);
-          const userIdJson = await userIdResponse.json();
-          const data = { id: userIdJson.id };
-          const options = await getRequestInitOptions("POST", tokens, data);
-          const response = await createPlaylist(options);
+          const getUserId = async () => {
+            const response = await spotifyClient.getUserId();
+            const json = await response.json();
+            return { id: json.id };
+          };
+          const data = await getUserId();
+          const response = await spotifyClient.createPlaylist(data);
           const json = await response.json();
           console.log(json);
         }}
