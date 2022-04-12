@@ -46,8 +46,18 @@ async function _search(accessToken, track) {
   if (response.status === 401) {
     //todo - refresh token
   }
-  const data = await response.json();
-  return data;
+  const json = await response.json();
+  return json;
+}
+
+/**
+ * Parses data to return uris
+ *
+ * @param {Object} data
+ * @returns {string[]} uris
+ */
+function _getUris(data) {
+  return [data.tracks.items[0].uri];
 }
 
 /**
@@ -61,7 +71,8 @@ export default async function handler(req, res) {
     const { authorization } = req.headers;
     const { track } = req.body;
     const results = await _search(authorization, track);
-    res.status(200).json(results);
+    const uris = _getUris(results);
+    res.status(200).json({ uris: uris });
   } catch (err) {
     res.status(500).json({ error: "failed to load data" });
   }

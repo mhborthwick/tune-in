@@ -20,7 +20,7 @@ function _getRequestInitOptions(accessToken) {
  * @param {string} accessToken
  * @returns tracks
  */
-async function _getUserId(accessToken) {
+async function _getUser(accessToken) {
   const baseUrl = "https://api.spotify.com";
   const endpoint = "/v1/me";
   const api = baseUrl + endpoint;
@@ -28,12 +28,22 @@ async function _getUserId(accessToken) {
   if (response.status === 401) {
     //todo - refresh token
   }
-  const data = await response.json();
-  return data;
+  return await response.json();
 }
 
 /**
- * get user id
+ * Parses data to get user id
+ *
+ * @param {Object} data
+ * @returns {string} id
+ */
+function _getId(data) {
+  const { id } = data;
+  return id;
+}
+
+/**
+ * Gets user id
  *
  * @param {NextApiRequest} req
  * @param {NextApiResponse} res
@@ -41,9 +51,9 @@ async function _getUserId(accessToken) {
 export default async function handler(req, res) {
   try {
     const { authorization } = req.headers;
-    const results = await _getUserId(authorization);
-    const id = { id: results.id };
-    res.status(200).json(id);
+    const results = await _getUser(authorization);
+    const id = _getId(results);
+    res.status(200).json({ id: id });
   } catch (err) {
     res.status(500).json({ error: "failed to load data" });
   }

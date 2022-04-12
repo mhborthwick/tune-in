@@ -19,6 +19,8 @@ function _getRequestInitOptions(accessToken, params) {
  * Search for tracks
  *
  * @param {string} accessToken
+ * @param {string} userId
+ *
  * @returns tracks
  */
 async function _createPlaylist(accessToken, userId, params) {
@@ -37,7 +39,18 @@ async function _createPlaylist(accessToken, userId, params) {
 }
 
 /**
- * get user id
+ * Parases data to return playlist id
+ *
+ * @param {Object} data
+ * @returns {string} id
+ */
+function _getPlaylistId(data) {
+  const { id } = data;
+  return id;
+}
+
+/**
+ * Creates playlist
  *
  * @param {NextApiRequest} req
  * @param {NextApiResponse} res
@@ -45,13 +58,11 @@ async function _createPlaylist(accessToken, userId, params) {
 export default async function handler(req, res) {
   try {
     const { authorization } = req.headers;
-    const { id } = req.body;
-    const params = {
-      name: "test 12345",
-      description: "test description",
-    };
+    const { id, name, description } = req.body;
+    const params = { name: name, description: description };
     const results = await _createPlaylist(authorization, id, params);
-    res.status(200).json(results);
+    const playlistId = _getPlaylistId(results);
+    res.status(200).json({ id: playlistId });
   } catch (err) {
     res.status(500).json({ error: "failed to load data" });
   }
