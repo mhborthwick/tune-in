@@ -38,7 +38,7 @@ async function _addToPlaylist(accessToken, playlistId, trackUris) {
 }
 
 /**
- * get user id
+ * Adds tracks to playlist
  *
  * @param {NextApiRequest} req
  * @param {NextApiResponse} res

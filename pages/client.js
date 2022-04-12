@@ -12,12 +12,10 @@ export default function GetData() {
     <Layout>
       <button
         onClick={async () => {
-          const data = {
-            track: "come and play in the milky night",
-          };
+          const data = { track: "come and play in the milky night" };
           const response = await spotifyClient.search(data);
           const json = await response.json();
-          console.log(json.tracks.items[0].uri);
+          console.log(json);
         }}
       >
         Search Track
@@ -36,9 +34,10 @@ export default function GetData() {
           const getUserId = async () => {
             const response = await spotifyClient.getUserId();
             const json = await response.json();
-            return { id: json.id };
+            return json.id;
           };
-          const data = await getUserId();
+          const id = await getUserId();
+          const data = { id: id, name: "test", description: "hello" };
           const response = await spotifyClient.createPlaylist(data);
           const json = await response.json();
           console.log(json);
@@ -48,29 +47,27 @@ export default function GetData() {
       </button>
       <button
         onClick={async () => {
-          const getTrackUri = async () => {
-            const data = {
-              track: "come and play in the milky night",
-            };
+          const getTrackUris = async () => {
+            const data = { track: "come and play in the milky night" };
             const response = await spotifyClient.search(data);
             const json = await response.json();
-            return { uris: [json.tracks.items[0].uri] };
+            return json.uris;
           };
           const getUserId = async () => {
             const response = await spotifyClient.getUserId();
             const json = await response.json();
-            return { id: json.id };
+            return json.id;
           };
-          const createPlaylist = async (data) => {
+          const getPlaylistId = async (data) => {
             const response = await spotifyClient.createPlaylist(data);
             const json = await response.json();
-            return { id: json.id };
+            return json.id;
           };
-          const trackUris = await getTrackUri();
-          const userId = await getUserId();
-          const playlistId = await createPlaylist(userId);
-          const data = { ...trackUris, ...playlistId };
-
+          const id = await getUserId();
+          const trackUris = await getTrackUris();
+          const playlistData = { id: id, name: "test", description: "hello" };
+          const playlistId = await getPlaylistId(playlistData);
+          const data = { id: playlistId, uris: trackUris };
           const response = await spotifyClient.addToPlaylist(data);
           const json = await response.json();
           console.log(json);
