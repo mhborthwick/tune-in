@@ -12,6 +12,15 @@ export default function GetData() {
     <Layout>
       <button
         onClick={async () => {
+          const response = await spotifyClient.getGenres();
+          const json = await response.json();
+          console.log(json);
+        }}
+      >
+        Get Genres
+      </button>
+      <button
+        onClick={async () => {
           const data = { track: "come and play in the milky night" };
           const response = await spotifyClient.search(data);
           const json = await response.json();
