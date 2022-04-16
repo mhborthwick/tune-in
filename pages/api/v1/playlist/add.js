@@ -1,3 +1,5 @@
+import { NextApiRequest, NextApiResponse } from "next";
+
 /**
  * Gets request init options
  *
@@ -16,10 +18,12 @@ function _getRequestInitOptions(accessToken, trackUris) {
 }
 
 /**
- * Search for tracks
+ * Adds tracks to playlist
  *
  * @param {string} accessToken
- * @returns tracks
+ * @param {string} playListId
+ * @param {string[]} trackUris
+ * @returns {Promise<Object>}
  */
 async function _addToPlaylist(accessToken, playlistId, trackUris) {
   const baseUrl = "https://api.spotify.com";

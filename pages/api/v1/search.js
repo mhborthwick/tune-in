@@ -30,11 +30,11 @@ function _getRequestInitOptions(accessToken) {
 }
 
 /**
- * Search for tracks
+ * Searches for tracks
  *
  * @param {string} accessToken
  * @param {string} track
- * @returns tracks
+ * @returns {Promise<Object>}
  */
 async function _search(accessToken, track) {
   const baseUrl = "https://api.spotify.com";
@@ -51,7 +51,7 @@ async function _search(accessToken, track) {
 }
 
 /**
- * Parses data to return uris
+ * Parses data and returns track uris
  *
  * @param {Object} data
  * @returns {string[]} uris
