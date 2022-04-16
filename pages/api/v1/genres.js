@@ -1,3 +1,5 @@
+import { NextApiRequest, NextApiResponse } from "next";
+
 /**
  * Gets request init options
  *
@@ -15,7 +17,7 @@ function _getRequestInitOptions(accessToken) {
 }
 
 /**
- * Get genre seeds
+ * Gets genre seeds
  *
  * @param {string} accessToken
  * @returns {Promise<{genres: string[]}>}

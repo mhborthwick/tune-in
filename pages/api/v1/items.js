@@ -17,10 +17,11 @@ function _getRequestInitOptions(accessToken) {
 }
 
 /**
- * Get top items
+ * Get top items (artists/tracks)
  *
  * @param {string} accessToken
- * @returns {Promise<{genres: string[]}>}
+ * @param {string} type
+ * @returns {Promise<Object>}
  */
 async function _getTopItems(accessToken, type) {
   const baseUrl = "https://api.spotify.com";

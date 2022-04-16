@@ -1,3 +1,5 @@
+import { NextApiRequest, NextApiResponse } from "next";
+
 /**
  * Gets request init options
  *
@@ -15,10 +17,10 @@ function _getRequestInitOptions(accessToken) {
 }
 
 /**
- * Search for tracks
+ * Gets user id
  *
  * @param {string} accessToken
- * @returns tracks
+ * @returns {Promise<Object>}
  */
 async function _getUser(accessToken) {
   const baseUrl = "https://api.spotify.com";
@@ -32,7 +34,7 @@ async function _getUser(accessToken) {
 }
 
 /**
- * Parses data to get user id
+ * Parses data and gets user id
  *
  * @param {Object} data
  * @returns {string} id

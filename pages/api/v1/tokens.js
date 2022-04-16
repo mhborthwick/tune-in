@@ -4,7 +4,6 @@ import { NextApiRequest, NextApiResponse } from "next";
  * Gets request init options
  *
  * @param {string} auth
- * @returns request init options (i.e. method and headers)
  */
 function _getRequestInitOptions(auth) {
   return {
@@ -40,7 +39,7 @@ function _getRequestBody(code, verifier) {
  *
  * @param {string} code
  * @param {string} verifier
- * @returns tokens
+ * @returns {Promise<{access_token: string, refresh_token: string}>}
  */
 export async function _getTokens(code, verifier) {
   const baseUrl = "https://accounts.spotify.com";
@@ -60,7 +59,7 @@ export async function _getTokens(code, verifier) {
 }
 
 /**
- * get tokens
+ * Get tokens
  *
  * @param {NextApiRequest} req
  * @param {NextApiResponse} res

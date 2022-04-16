@@ -1,9 +1,11 @@
+import { NextApiRequest, NextApiResponse } from "next";
+
 /**
  * Gets request init options
  *
  * @param {string} accessToken
  */
-function _getRequestInitOptions(accessToken, params) {
+function _getRequestInitOptions(accessToken, details) {
   return {
     method: "POST",
     headers: {
@@ -11,25 +13,25 @@ function _getRequestInitOptions(accessToken, params) {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(params),
+    body: JSON.stringify(details),
   };
 }
 
 /**
- * Search for tracks
+ * Creates playlist
  *
  * @param {string} accessToken
  * @param {string} userId
- *
- * @returns tracks
+ * @param {{name: string, description: string}} details
+ * @returns {Promise<Object>}
  */
-async function _createPlaylist(accessToken, userId, params) {
+async function _createPlaylist(accessToken, userId, details) {
   const baseUrl = "https://api.spotify.com";
   const endpoint = `/v1/users/${userId}/playlists`;
   const api = baseUrl + endpoint;
   const response = await fetch(
     api,
-    _getRequestInitOptions(accessToken, params)
+    _getRequestInitOptions(accessToken, details)
   );
   if (response.status === 401) {
     //todo - refresh token
@@ -39,7 +41,7 @@ async function _createPlaylist(accessToken, userId, params) {
 }
 
 /**
- * Parases data to return playlist id
+ * Parses data and returns playlist id
  *
  * @param {Object} data
  * @returns {string} id
@@ -59,8 +61,8 @@ export default async function handler(req, res) {
   try {
     const { authorization } = req.headers;
     const { id, name, description } = req.body;
-    const params = { name: name, description: description };
-    const results = await _createPlaylist(authorization, id, params);
+    const details = { name: name, description: description };
+    const results = await _createPlaylist(authorization, id, details);
     const playlistId = _getPlaylistId(results);
     res.status(200).json({ id: playlistId });
   } catch (err) {
