@@ -19,7 +19,7 @@ describe("Home", () => {
     fireEvent.click(button);
     expect(auth.redirectToAuthUrl).toHaveBeenCalledTimes(1);
     const mockQuery =
-      "response_type=code&client_id=foo&scope=user-read-private+user-read-email+playlist-modify-public&redirect_uri=bar&state=123abcABC&code_challenge_method=S256&code_challenge=bar";
+      "response_type=code&client_id=foo&scope=user-read-private+user-read-email+playlist-modify-public+user-top-read&redirect_uri=bar&state=123abcABC&code_challenge_method=S256&code_challenge=bar";
     expect(auth.redirectToAuthUrl).toHaveBeenCalledWith(mockQuery);
   });
 });
