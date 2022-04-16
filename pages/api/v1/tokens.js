@@ -45,9 +45,7 @@ export async function _getTokens(code, verifier) {
   const baseUrl = "https://accounts.spotify.com";
   const endpoint = "/api/token";
   const auth =
-    process.env.NEXT_PUBLIC_CLIENT_ID +
-    ":" +
-    process.env.NEXT_PUBLIC_CLIENT_SECRET;
+    process.env.NEXT_PUBLIC_CLIENT_ID + ":" + process.env.NEXT_CLIENT_SECRET;
   const api = baseUrl + endpoint;
   const response = await fetch(api, {
     ..._getRequestInitOptions(auth),
