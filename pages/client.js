@@ -12,6 +12,24 @@ export default function GetData() {
     <Layout>
       <button
         onClick={async () => {
+          const response = await spotifyClient.getTopItems("artists");
+          const json = await response.json();
+          console.log(json);
+        }}
+      >
+        Get favorite artist
+      </button>
+      <button
+        onClick={async () => {
+          const response = await spotifyClient.getTopItems("tracks");
+          const json = await response.json();
+          console.log(json);
+        }}
+      >
+        Get favorite tracks
+      </button>
+      <button
+        onClick={async () => {
           const response = await spotifyClient.getGenres();
           const json = await response.json();
           console.log(json);
