@@ -18,6 +18,12 @@ NEXT_CLIENT_SECRET=<CLIENT_SECRET>
 NEXT_PUBLIC_REDIRECT_URI=http://localhost:3000
 ```
 
+- Add the following to access the `/client` page
+
+```
+NEXT_PUBLIC_CONFIG=dev
+```
+
 > Note: Register an app with [Spotify](https://developer.spotify.com/dashboard/applications) to obtain your client credentials
 
 ## Install

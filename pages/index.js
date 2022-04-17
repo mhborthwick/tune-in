@@ -15,7 +15,11 @@ export default function Home() {
     const code = getCodeFromQuery();
     if (code) {
       document.cookie = `code=${code}`;
-      router.push("/client");
+      if (process.env.NEXT_PUBLIC_CONFIG === "dev") {
+        router.push("/client");
+      } else {
+        router.push("/select-cards");
+      }
     }
   });
   return (
