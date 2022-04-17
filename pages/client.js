@@ -12,6 +12,24 @@ export default function GetData() {
     <Layout>
       <button
         onClick={async () => {
+          const data = {
+            seedArtists: "3XxNRirzbjfLdDli06zMaB,",
+            seedGenres: "acoustic,breakbeat",
+            seedTracks: "5B6Kjha6RRIMWGN7zGsAaT,6BGNjTZ8zp9MlsIydBa7A9",
+            targetDanceability: 0.7,
+            targetEnergy: 0.4,
+            targetLoudness: 0.3,
+            targetPopularity: 85,
+          };
+          const response = await spotifyClient.getRecommendations(data);
+          const json = await response.json();
+          console.log(json);
+        }}
+      >
+        Get recommendations
+      </button>
+      <button
+        onClick={async () => {
           const response = await spotifyClient.getTopItems("artists");
           const json = await response.json();
           console.log(json);
