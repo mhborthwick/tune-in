@@ -1,5 +1,6 @@
 import Layout from "../components/layout";
 import { Cards } from "../components/card";
+import { Results } from "../components/results";
 import { useState } from "react";
 
 export default function SelectCards() {
@@ -14,7 +15,7 @@ export default function SelectCards() {
   return (
     <Layout>
       {count === 3 ? (
-        <div>results</div>
+        <Results cardState={cardState} />
       ) : (
         <Cards setCardState={setCardState} updateCount={updateCount} />
       )}
