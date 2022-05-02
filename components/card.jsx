@@ -1,26 +1,4 @@
-const tarot = {
-  ARTIST: {
-    label: "artist",
-    danceability: 33,
-    energy: 33,
-    loudness: 33,
-    popularity: 33,
-  },
-  BEAT: {
-    label: "beat",
-    danceability: 22,
-    energy: 22,
-    loudness: 22,
-    popularity: 22,
-  },
-  DEBUT: {
-    label: "debut",
-    danceability: 11,
-    energy: 11,
-    loudness: 11,
-    popularity: 11,
-  },
-};
+import { tarot } from "../utils/tarot"
 
 const Card = ({ tarotInfo, setCardState, updateCount }) => {
   return (
@@ -53,17 +31,17 @@ export const Cards = ({ setCardState, updateCount }) => {
   return (
     <>
       <Card
-        tarotInfo={tarot.ARTIST}
+        tarotInfo={tarot.artist}
         setCardState={setCardState}
         updateCount={updateCount}
       />
       <Card
-        tarotInfo={tarot.BEAT}
+        tarotInfo={tarot.beat}
         setCardState={setCardState}
         updateCount={updateCount}
       />
       <Card
-        tarotInfo={tarot.DEBUT}
+        tarotInfo={tarot.debut}
         setCardState={setCardState}
         updateCount={updateCount}
       />
