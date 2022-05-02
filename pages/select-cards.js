@@ -1,7 +1,8 @@
 import Layout from "../components/layout";
-import { Cards } from "../components/card";
+import { Card } from "../components/card";
 import { Results } from "../components/results";
 import { useState } from "react";
+import { tarot } from "../utils/tarot";
 
 export default function SelectCards() {
   const [count, updateCount] = useState(0);
@@ -17,7 +18,23 @@ export default function SelectCards() {
       {count === 3 ? (
         <Results cardState={cardState} />
       ) : (
-        <Cards setCardState={setCardState} updateCount={updateCount} />
+        <>
+          <Card
+            tarotInfo={tarot.artist}
+            setCardState={setCardState}
+            updateCount={updateCount}
+          />
+          <Card
+            tarotInfo={tarot.debut}
+            setCardState={setCardState}
+            updateCount={updateCount}
+          />
+          <Card
+            tarotInfo={tarot.icon}
+            setCardState={setCardState}
+            updateCount={updateCount}
+          />
+        </>
       )}
     </Layout>
   );

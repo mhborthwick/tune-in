@@ -1,6 +1,4 @@
-import { tarot } from "../utils/tarot"
-
-const Card = ({ tarotInfo, setCardState, updateCount }) => {
+export const Card = ({ tarotInfo, setCardState, updateCount }) => {
   return (
     <span
       style={{
@@ -24,27 +22,5 @@ const Card = ({ tarotInfo, setCardState, updateCount }) => {
     >
       {tarotInfo.label}
     </span>
-  );
-};
-
-export const Cards = ({ setCardState, updateCount }) => {
-  return (
-    <>
-      <Card
-        tarotInfo={tarot.artist}
-        setCardState={setCardState}
-        updateCount={updateCount}
-      />
-      <Card
-        tarotInfo={tarot.beat}
-        setCardState={setCardState}
-        updateCount={updateCount}
-      />
-      <Card
-        tarotInfo={tarot.debut}
-        setCardState={setCardState}
-        updateCount={updateCount}
-      />
-    </>
   );
 };
