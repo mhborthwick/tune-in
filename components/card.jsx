@@ -1,28 +1,4 @@
-const tarot = {
-  ARTIST: {
-    label: "artist",
-    danceability: 33,
-    energy: 33,
-    loudness: 33,
-    popularity: 33,
-  },
-  BEAT: {
-    label: "beat",
-    danceability: 22,
-    energy: 22,
-    loudness: 22,
-    popularity: 22,
-  },
-  DEBUT: {
-    label: "debut",
-    danceability: 11,
-    energy: 11,
-    loudness: 11,
-    popularity: 11,
-  },
-};
-
-const Card = ({ tarotInfo, setCardState, updateCount }) => {
+export const Card = ({ tarotInfo, setCardState, updateCount }) => {
   return (
     <span
       style={{
@@ -46,27 +22,5 @@ const Card = ({ tarotInfo, setCardState, updateCount }) => {
     >
       {tarotInfo.label}
     </span>
-  );
-};
-
-export const Cards = ({ setCardState, updateCount }) => {
-  return (
-    <>
-      <Card
-        tarotInfo={tarot.ARTIST}
-        setCardState={setCardState}
-        updateCount={updateCount}
-      />
-      <Card
-        tarotInfo={tarot.BEAT}
-        setCardState={setCardState}
-        updateCount={updateCount}
-      />
-      <Card
-        tarotInfo={tarot.DEBUT}
-        setCardState={setCardState}
-        updateCount={updateCount}
-      />
-    </>
   );
 };
