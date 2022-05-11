@@ -5,37 +5,25 @@ import { useState } from "react";
 import { tarot } from "../utils/tarot";
 
 export default function SelectCards() {
-  const [count, updateCount] = useState(0);
+  const [isClicked, updateClick] = useState(false);
   const [cardState, setCardState] = useState({
     danceability: 0,
     energy: 0,
     loudness: 0,
     popularity: 0,
   });
-  console.log(cardState, count);
+  console.log(cardState, isClicked);
   return (
     <Layout>
-      {count > 0 ? (
+      {isClicked ? (
         <Results cardState={cardState} />
       ) : (
         <div className="cards">
           <h1>Here are your cards</h1>
           <div className="cards__grid">
-            <Card
-              tarotInfo={tarot.artist}
-              setCardState={setCardState}
-              // updateCount={updateCount}
-            />
-            <Card
-              tarotInfo={tarot.debut}
-              setCardState={setCardState}
-              // updateCount={updateCount}
-            />
-            <Card
-              tarotInfo={tarot.icon}
-              setCardState={setCardState}
-              // updateCount={updateCount}
-            />
+            <Card tarotInfo={tarot.artist} />
+            <Card tarotInfo={tarot.debut} />
+            <Card tarotInfo={tarot.icon} />
           </div>
           <button
             type="submit"
@@ -50,8 +38,8 @@ export default function SelectCards() {
                   popularity: prev.popularity + tarotInfo.popularity,
                 };
               });
-              updateCount((prev) => {
-                return (prev += 1);
+              updateClick(() => {
+                return true;
               });
               console.log(cardState);
             }}
