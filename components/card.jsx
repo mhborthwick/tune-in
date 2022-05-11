@@ -1,26 +1,15 @@
-export const Card = ({ tarotInfo, setCardState, updateCount }) => {
+import styles from "../styles/card.module.css"
+
+export function Card({ tarotInfo, setCardState, updateCount }) {
   return (
-    <span
-      style={{
-        border: "2px solid black",
-        padding: "1rem",
-        margin: "1rem",
-      }}
-      onClick={() => {
-        setCardState((prev) => {
-          return {
-            danceability: prev.danceability + tarotInfo.danceability,
-            energy: prev.energy + tarotInfo.energy,
-            loudness: prev.loudness + tarotInfo.loudness,
-            popularity: prev.popularity + tarotInfo.popularity,
-          };
-        });
-        updateCount((prev) => {
-          return (prev += 1);
-        });
-      }}
-    >
-      {tarotInfo.label}
+    <span>
+      <img 
+        className={styles.card} 
+        alt="Tarot card, face up"
+        src="../assets/card-1.png"
+        width="1000"
+        height="auto"
+      />
     </span>
   );
 };

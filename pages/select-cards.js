@@ -15,26 +15,50 @@ export default function SelectCards() {
   console.log(cardState, count);
   return (
     <Layout>
-      {count === 3 ? (
+      {count > 0 ? (
         <Results cardState={cardState} />
       ) : (
-        <>
-          <Card
-            tarotInfo={tarot.artist}
-            setCardState={setCardState}
-            updateCount={updateCount}
-          />
-          <Card
-            tarotInfo={tarot.debut}
-            setCardState={setCardState}
-            updateCount={updateCount}
-          />
-          <Card
-            tarotInfo={tarot.icon}
-            setCardState={setCardState}
-            updateCount={updateCount}
-          />
-        </>
+        <div className="cards">
+          <h1>Here are your cards</h1>
+          <div className="cards__grid">
+            <Card
+              tarotInfo={tarot.artist}
+              setCardState={setCardState}
+              // updateCount={updateCount}
+            />
+            <Card
+              tarotInfo={tarot.debut}
+              setCardState={setCardState}
+              // updateCount={updateCount}
+            />
+            <Card
+              tarotInfo={tarot.icon}
+              setCardState={setCardState}
+              // updateCount={updateCount}
+            />
+          </div>
+          <button
+            type="submit"
+            className="btn center-block"
+            onClick={() => {
+              let tarotInfo = tarot.icon;
+              setCardState((prev) => {
+                return {
+                  danceability: prev.danceability + tarotInfo.danceability,
+                  energy: prev.energy + tarotInfo.energy,
+                  loudness: prev.loudness + tarotInfo.loudness,
+                  popularity: prev.popularity + tarotInfo.popularity,
+                };
+              });
+              updateCount((prev) => {
+                return (prev += 1);
+              });
+              console.log(cardState);
+            }}
+          >
+            test
+          </button>
+        </div>
       )}
     </Layout>
   );
