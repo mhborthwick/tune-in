@@ -1,5 +1,6 @@
 html,
 body {
+  background-color: black;
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
@@ -18,3 +19,38 @@ a {
 button {
   margin: 0.5rem;
 }
+
+img {
+  max-width: 100%;
+}
+
+.cards {
+  color: white;
+}
+
+.cards__grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+  max-width: 1200px;
+}
+
+.btn {
+  background: none;
+  border: 1px solid white;
+  border-radius: 1rem;
+  color: white;
+  cursor: pointer;
+  padding: 1rem 2rem;
+}
+
+.center-block {
+  display: block;
+  margin: auto;
+}
+@media (min-width: 1050px) {
+  .cards__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
