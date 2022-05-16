@@ -3,6 +3,22 @@ import { Card } from "../components/card";
 import { Results } from "../components/results";
 import { useState } from "react";
 import { tarot } from "../utils/tarot";
+import useSWR from "swr";
+
+function _getRandInts(max) {
+  const nums = new Set();
+  while (nums.size < 3) {
+    nums.add(Math.floor(Math.random() * max));
+  }
+  return [...nums];
+}
+
+function getCards() {
+  const keys = Object.keys(tarot);
+  const randInts = _getRandInts(keys.length);
+  const cards = [keys[randInts[0]], keys[randInts[1]], keys[randInts[2]]];
+  return cards;
+}
 
 export default function SelectCards() {
   const [isClicked, updateClick] = useState(false);
@@ -12,7 +28,13 @@ export default function SelectCards() {
     loudness: 0,
     popularity: 0,
   });
-  console.log(cardState, isClicked);
+
+  // todo - look into refactoring
+  const { data } = useSWR("cards", getCards);
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Layout>
       {isClicked ? (
@@ -21,9 +43,9 @@ export default function SelectCards() {
         <div className="cards">
           <h1>Here are your cards</h1>
           <div className="cards__grid">
-            <Card tarotInfo={tarot.artist} />
-            <Card tarotInfo={tarot.debut} />
-            <Card tarotInfo={tarot.icon} />
+            <Card tarotInfo={tarot[data[0]]} />
+            <Card tarotInfo={tarot[data[1]]} />
+            <Card tarotInfo={tarot[data[2]]} />
           </div>
           <button
             type="submit"

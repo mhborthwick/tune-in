@@ -1,8 +1,15 @@
+import { useState, useEffect } from "react" 
 import styles from "../styles/card.module.css"
 
 export function Card({ tarotInfo, setCardState, updateCount }) {
+  // const [info, handleTarot] = useState('');
+  // useEffect(() => { 
+  //   handleTarot(tarotInfo);
+  //   return () => handleTarot('')
+  // }, [tarotInfo])
   return (
-    <span>
+    <div>
+      {tarotInfo.label}
       <img 
         className={styles.card} 
         alt="Tarot card, face up"
@@ -10,6 +17,6 @@ export function Card({ tarotInfo, setCardState, updateCount }) {
         width="1000"
         height="auto"
       />
-    </span>
+    </div>
   );
 };
