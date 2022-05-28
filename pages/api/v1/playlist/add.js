@@ -66,7 +66,9 @@ export default async function handler(req, res) {
     const { authorization, refresh } = req.headers;
     const { id, uris } = req.body;
     const results = await _addToPlaylist(authorization, refresh, id, uris);
-    if (results.refresh_token) {
+    if (results.error) {
+      res.status(498).json(results);
+    } else if (results.refresh_token) {
       res.status(401).json(results);
     } else {
       res.status(200).json(results);
