@@ -78,7 +78,9 @@ export default async function handler(req, res) {
     const { id, name, description } = req.body;
     const details = { name: name, description: description };
     const results = await _createPlaylist(authorization, refresh, id, details);
-    if (results.refresh_token) {
+    if (results.error) {
+      res.status(498).json(results);
+    } else if (results.refresh_token) {
       res.status(401).json(results);
     } else {
       const playlistId = _getPlaylistId(results);
