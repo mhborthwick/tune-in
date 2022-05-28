@@ -25,7 +25,7 @@ function _getRequestInitOptions(accessToken, trackUris) {
  * @param {string[]} trackUris
  * @returns {Promise<Object>}
  */
-async function _addToPlaylist(accessToken, playlistId, trackUris) {
+async function _addToPlaylist(accessToken, refresh, playlistId, trackUris) {
   const baseUrl = "https://api.spotify.com";
   const endpoint = `/v1/playlists/${playlistId}/tracks`;
   const api = baseUrl + endpoint;
@@ -33,9 +33,23 @@ async function _addToPlaylist(accessToken, playlistId, trackUris) {
     api,
     _getRequestInitOptions(accessToken, trackUris)
   );
-  console.log(response);
   if (response.status === 401) {
-    //todo - refresh token
+    const baseUrl = "https://accounts.spotify.com";
+    const endpoint = "/api/token";
+    const api = baseUrl + endpoint;
+    const response = await fetch(api, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        grant_type: "refresh_token",
+        refresh_token: refresh,
+        client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
+      }),
+    });
+    const data = await response.json();
+    return data;
   }
   const data = await response.json();
   return data;
@@ -49,10 +63,14 @@ async function _addToPlaylist(accessToken, playlistId, trackUris) {
  */
 export default async function handler(req, res) {
   try {
-    const { authorization } = req.headers;
+    const { authorization, refresh } = req.headers;
     const { id, uris } = req.body;
-    const results = await _addToPlaylist(authorization, id, uris);
-    res.status(200).json(results);
+    const results = await _addToPlaylist(authorization, refresh, id, uris);
+    if (results.refresh_token) {
+      res.status(401).json(results);
+    } else {
+      res.status(200).json(results);
+    }
   } catch (err) {
     res.status(500).json({ error: "failed to load data" });
   }
