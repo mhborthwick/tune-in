@@ -36,7 +36,7 @@ function _getRequestInitOptions(accessToken) {
  * @param {string} track
  * @returns {Promise<Object>}
  */
-async function _search(accessToken, track) {
+async function _search(accessToken, refresh, track) {
   const baseUrl = "https://api.spotify.com";
   const endpoint = "/v1/search";
   const params = _getQueryParams(track);
@@ -44,7 +44,22 @@ async function _search(accessToken, track) {
   const api = baseUrl + endpoint + "?" + query;
   const response = await fetch(api, _getRequestInitOptions(accessToken));
   if (response.status === 401) {
-    //todo - refresh token
+    const baseUrl = "https://accounts.spotify.com";
+    const endpoint = "/api/token";
+    const api = baseUrl + endpoint;
+    const response = await fetch(api, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        grant_type: "refresh_token",
+        refresh_token: refresh,
+        client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
+      }),
+    });
+    const data = await response.json();
+    return data;
   }
   const json = await response.json();
   return json;
@@ -68,11 +83,15 @@ function _getUris(data) {
  */
 export default async function handler(req, res) {
   try {
-    const { authorization } = req.headers;
+    const { authorization, refresh } = req.headers;
     const { track } = req.body;
-    const results = await _search(authorization, track);
-    const uris = _getUris(results);
-    res.status(200).json({ uris: uris });
+    const results = await _search(authorization, refresh, track);
+    if (results.refresh_token) {
+      res.status(401).json(results);
+    } else {
+      const uris = _getUris(results);
+      res.status(200).json({ uris: uris });
+    }
   } catch (err) {
     res.status(500).json({ error: "failed to load data" });
   }

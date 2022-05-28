@@ -23,13 +23,28 @@ function _getRequestInitOptions(accessToken) {
  * @param {string} type
  * @returns {Promise<Object>}
  */
-async function _getTopItems(accessToken, type) {
+async function _getTopItems(accessToken, refresh, type) {
   const baseUrl = "https://api.spotify.com";
   const endpoint = `/v1/me/top/${type}`;
   const api = baseUrl + endpoint;
   const response = await fetch(api, _getRequestInitOptions(accessToken));
   if (response.status === 401) {
-    //todo - refresh token
+    const baseUrl = "https://accounts.spotify.com";
+    const endpoint = "/api/token";
+    const api = baseUrl + endpoint;
+    const response = await fetch(api, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        grant_type: "refresh_token",
+        refresh_token: refresh,
+        client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
+      }),
+    });
+    const data = await response.json();
+    return data;
   }
   return await response.json();
 }
@@ -42,10 +57,14 @@ async function _getTopItems(accessToken, type) {
  */
 export default async function handler(req, res) {
   try {
-    const { authorization } = req.headers;
+    const { authorization, refresh } = req.headers;
     const { type } = req.query;
-    const results = await _getTopItems(authorization, type);
-    res.status(200).json(results);
+    const results = await _getTopItems(authorization, refresh, type);
+    if (results.refresh_token) {
+      res.status(401).json(results);
+    } else {
+      res.status(200).json(results);
+    }
   } catch (err) {
     res.status(500).json({ error: "failed to load data" });
   }
