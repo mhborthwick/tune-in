@@ -15,7 +15,31 @@ export const Results = ({ cardState }) => {
     const json = await response.json();
     return json.id;
   };
-  const fetcher = async (_, params) => {
+  const getSeedData = async () => {
+    const response = await client.getTopItems("artists");
+    const json = await response.json();
+    const artist = json.items[0].id;
+    const genre1 = json.items[0].genres[0];
+    const genre2 = json.items[1].genres[0];
+    const genres = `${genre1},${genre2}`;
+    const response2 = await client.getTopItems("tracks");
+    const json2 = await response2.json();
+    const track1 = json2.items[0].id;
+    const track2 = json2.items[1].id;
+    const seedTracks = `${track1},${track2}`;
+    return { artist, genres, seedTracks };
+  };
+  const fetcher = async () => {
+    const { artist, genres, seedTracks } = await getSeedData();
+    const params = {
+      seedArtists: artist,
+      seedGenres: genres,
+      seedTracks: seedTracks,
+      targetDanceability: cardState.danceability / 100,
+      targetEnergy: cardState.energy / 100,
+      targetLoudness: cardState.loudness / 100,
+      targetPopularity: cardState.popularity,
+    };
     const recResponse = await client.getRecommendations(params);
     const recJson = await recResponse.json();
     const { tracks } = recJson;
@@ -31,16 +55,7 @@ export const Results = ({ cardState }) => {
     const json = await response.json();
     return json;
   };
-  const params = {
-    seedArtists: "3XxNRirzbjfLdDli06zMaB,",
-    seedGenres: "acoustic,breakbeat",
-    seedTracks: "5B6Kjha6RRIMWGN7zGsAaT,6BGNjTZ8zp9MlsIydBa7A9",
-    targetDanceability: cardState.danceability / 100,
-    targetEnergy: cardState.energy / 100,
-    targetLoudness: cardState.loudness / 100,
-    targetPopularity: cardState.popularity,
-  };
-  const { data } = useSWR(["getTracks", params], fetcher, {
+  const { data } = useSWR("getTracks", fetcher, {
     revalidateIfStale: false,
     shouldRetryOnError: false,
     revalidateOnFocus: false,
