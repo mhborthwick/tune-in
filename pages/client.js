@@ -1,4 +1,4 @@
-import Layout from "../components/layout";
+import { Layout } from "../components/layout";
 import { useRef } from "react";
 import { Spotify } from "../lib/spotify";
 

@@ -8,7 +8,7 @@ import styles from "../styles/Home.module.css";
  * @param {{ children: JSX.Element}} Props
  * @returns {JSX.Element}
  */
-export default function Layout({ children }) {
+export function Layout({ children }) {
   return (
     <div className={styles.container}>
       <Head>

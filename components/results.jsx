@@ -65,7 +65,7 @@ export const Results = ({ cardState }) => {
     refreshInterval: 0,
   });
   if (!data) {
-    return <div>Loading...</div>;
+    return <div style={{ color: "white" }}>Loading...</div>;
   } else if (data) {
     return <div style={{ color: "white" }}>playlist created</div>;
   }

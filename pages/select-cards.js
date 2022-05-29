@@ -1,10 +1,14 @@
-import Layout from "../components/layout";
-import { Card } from "../components/card";
-import { Results } from "../components/results";
-import { useState } from "react";
-import { tarot } from "../utils/tarot";
 import useSWR from "swr";
+import { useState } from "react";
+import { Card, Layout, Results } from "../components/index";
+import { tarot } from "../utils/tarot";
 
+/**
+ * Generates an array with 3 unique numbers
+ *
+ * @param {number} max
+ * @returns {number[]} unique numbers
+ */
 function _getRandInts(max) {
   const nums = new Set();
   while (nums.size < 3) {
@@ -13,10 +17,15 @@ function _getRandInts(max) {
   return [...nums];
 }
 
+/**
+ * Generates an array with 3 unique cards
+ *
+ * @returns {string[]} unique cards
+ */
 function getCards() {
   const keys = Object.keys(tarot);
   const randInts = _getRandInts(keys.length);
-  const cards = [keys[randInts[0]], keys[randInts[1]], keys[randInts[2]]];
+  const cards = randInts.map((v) => keys[v]);
   return cards;
 }
 
@@ -32,7 +41,7 @@ export default function SelectCards() {
   // todo - look into refactoring
   const { data } = useSWR("cards", getCards);
   if (!data) {
-    return <div>Loading...</div>;
+    return <div style={{ color: "white" }}>Loading...</div>;
   }
 
   return (

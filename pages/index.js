@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import Layout from "../components/layout";
+import { Layout } from "../components/layout";
 import {
   getAuthParams,
   getCodeChallenge,
