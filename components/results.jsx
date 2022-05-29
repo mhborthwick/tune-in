@@ -67,6 +67,6 @@ export const Results = ({ cardState }) => {
   if (!data) {
     return <div>Loading...</div>;
   } else if (data) {
-    return <div>playlist created</div>;
+    return <div style={{ color: "white" }}>playlist created</div>;
   }
 };
