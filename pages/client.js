@@ -1,10 +1,11 @@
-import Layout from "../components/layout";
+import { Layout } from "../components/layout";
 import { useRef } from "react";
 import { Spotify } from "../lib/spotify";
 
-// Temp page to test Spotify API functionality
-// Make sure to access this from the front page
-// by clicking Log In to Get Started
+/**
+ * Temp page for testing Spotify API functionality
+ * Make sure to access this from the homepage
+ */
 export default function GetData() {
   const tokens = useRef({ access_token: "", refresh_token: "" });
   const spotifyClient = Spotify.init(tokens);
