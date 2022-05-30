@@ -37,13 +37,20 @@ export default function SelectCards() {
     loudness: 0,
     popularity: 0,
   });
-
   // todo - look into refactoring
-  const { data } = useSWR("cards", getCards);
+  // todo - look into using reducer
+  const { data } = useSWR("cards", getCards, {
+    revalidateIfStale: false,
+    shouldRetryOnError: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenOffline: false,
+    refreshWhenHidden: false,
+    refreshInterval: 0,
+  });
   if (!data) {
     return <div style={{ color: "white" }}>Loading...</div>;
   }
-
   return (
     <Layout>
       {isClicked ? (

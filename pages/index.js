@@ -1,7 +1,7 @@
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import { useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Layout } from "../components/layout";
+import { Layout } from "../components/index";
 import {
   getAuthParams,
   getCodeChallenge,
@@ -10,20 +10,26 @@ import {
 } from "../utils/auth";
 import { cookies } from "../services/cookies";
 
+/**
+ * Routes user to selectCards page
+ *
+ * @param {NextRouter} router
+ */
+function routeUser(router) {
+  if (process.env.NEXT_PUBLIC_CONFIG === "dev") {
+    router.push("/client");
+  } else {
+    router.push("/select-cards");
+  }
+}
+
 export default function Home() {
   const router = useRouter();
-  function routeUser() {
-    if (process.env.NEXT_PUBLIC_CONFIG === "dev") {
-      router.push("/client");
-    } else {
-      router.push("/select-cards");
-    }
-  }
   useEffect(() => {
     const code = getCodeFromQuery();
     if (code) {
       cookies.set("code", code);
-      routeUser();
+      routeUser(router);
     }
   });
   return (
