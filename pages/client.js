@@ -1,5 +1,4 @@
 import { Layout } from "../components/index";
-import { useRef } from "react";
 import { Spotify } from "../lib/spotify";
 
 /**
@@ -7,8 +6,7 @@ import { Spotify } from "../lib/spotify";
  * Make sure to access this from homepage
  */
 export default function GetData() {
-  const tokens = useRef({ access_token: "", refresh_token: "" });
-  const spotifyClient = Spotify.init(tokens);
+  const spotifyClient = Spotify.init();
   return (
     <Layout>
       <button

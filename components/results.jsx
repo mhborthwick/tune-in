@@ -1,10 +1,8 @@
-import { useRef } from "react";
 import useSWR from "swr";
 import { Spotify } from "../lib/spotify";
 
 export const Results = ({ cardState }) => {
-  const tokens = useRef({ access_token: "", refresh_token: "" });
-  const client = Spotify.init(tokens);
+  const client = Spotify.init();
   const getUserId = async () => {
     const response = await client.getUserId();
     const json = await response.json();
