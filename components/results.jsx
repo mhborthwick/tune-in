@@ -45,7 +45,11 @@ export const Results = ({ cardState }) => {
       return t.uri;
     });
     const id = await getUserId();
-    const playlistData = { id: id, name: "test", description: "hello" };
+    const playlistData = {
+      id: id,
+      name: "Your tune-in playlist",
+      description: "Enjoy :)",
+    };
     const playlistId = await getPlaylistId(playlistData);
     const data = { id: playlistId, uris: uris };
     console.log(data);
