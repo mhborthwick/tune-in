@@ -1,10 +1,8 @@
-import { useRef } from "react";
 import useSWR from "swr";
 import { Spotify } from "../lib/spotify";
 
 export const Results = ({ cardState }) => {
-  const tokens = useRef({ access_token: "", refresh_token: "" });
-  const client = Spotify.init(tokens);
+  const client = Spotify.init();
   const getUserId = async () => {
     const response = await client.getUserId();
     const json = await response.json();
@@ -47,7 +45,11 @@ export const Results = ({ cardState }) => {
       return t.uri;
     });
     const id = await getUserId();
-    const playlistData = { id: id, name: "test", description: "hello" };
+    const playlistData = {
+      id: id,
+      name: "Your tune-in playlist",
+      description: "Enjoy :)",
+    };
     const playlistId = await getPlaylistId(playlistData);
     const data = { id: playlistId, uris: uris };
     console.log(data);

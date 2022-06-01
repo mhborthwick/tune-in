@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { useState } from "react";
+import { useReducer } from "react";
 import { Card, Layout, Results } from "../components/index";
 import { tarot } from "../utils/tarot";
 
@@ -29,16 +29,38 @@ function getCards() {
   return cards;
 }
 
+/**
+ * Reducer fn for managing card state
+ *
+ * @param state
+ * @param action
+ */
+function reducer(state, action) {
+  const { cardState } = state;
+  const { payload } = action;
+  if (action.type === "click") {
+    return {
+      isClicked: true,
+      cardState: {
+        danceability: cardState.danceability + payload.danceability,
+        energy: cardState.energy + payload.energy,
+        loudness: cardState.loudness + payload.loudness,
+        popularity: cardState.popularity + payload.popularity,
+      },
+    };
+  }
+}
+
 export default function SelectCards() {
-  const [isClicked, updateClick] = useState(false);
-  const [cardState, setCardState] = useState({
-    danceability: 0,
-    energy: 0,
-    loudness: 0,
-    popularity: 0,
+  const [state, dispatch] = useReducer(reducer, {
+    isClicked: false,
+    cardState: {
+      danceability: 0,
+      energy: 0,
+      loudness: 0,
+      popularity: 0,
+    },
   });
-  // todo - look into refactoring
-  // todo - look into using reducer
   const { data } = useSWR("cards", getCards, {
     revalidateIfStale: false,
     shouldRetryOnError: false,
@@ -53,8 +75,8 @@ export default function SelectCards() {
   }
   return (
     <Layout>
-      {isClicked ? (
-        <Results cardState={cardState} />
+      {state.isClicked ? (
+        <Results cardState={state.cardState} />
       ) : (
         <div className="cards">
           <h1>Here are your cards</h1>
@@ -67,19 +89,28 @@ export default function SelectCards() {
             type="submit"
             className="btn center-block"
             onClick={() => {
-              let tarotInfo = tarot.icon;
-              setCardState((prev) => {
-                return {
-                  danceability: prev.danceability + tarotInfo.danceability,
-                  energy: prev.energy + tarotInfo.energy,
-                  loudness: prev.loudness + tarotInfo.loudness,
-                  popularity: prev.popularity + tarotInfo.popularity,
-                };
-              });
-              updateClick(() => {
-                return true;
-              });
-              console.log(cardState);
+              const tarotInfo = data.reduce(
+                (prev, curr) => {
+                  const danceability =
+                    prev.danceability + tarot[curr].danceability;
+                  const energy = prev.energy + tarot[curr].energy;
+                  const loudness = prev.loudness + tarot[curr].loudness;
+                  const popularity = prev.popularity + tarot[curr].popularity;
+                  return {
+                    danceability,
+                    energy,
+                    loudness,
+                    popularity,
+                  };
+                },
+                {
+                  danceability: 0,
+                  energy: 0,
+                  loudness: 0,
+                  popularity: 0,
+                }
+              );
+              dispatch({ type: "click", payload: tarotInfo });
             }}
           >
             test
