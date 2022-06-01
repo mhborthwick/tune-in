@@ -38,7 +38,6 @@ function getCards() {
 function reducer(state, action) {
   const { cardState } = state;
   const { payload } = action;
-  console.log(payload);
   if (action.type === "click") {
     return {
       isClicked: true,
@@ -74,7 +73,6 @@ export default function SelectCards() {
   if (!data) {
     return <div style={{ color: "white" }}>Loading...</div>;
   }
-  console.log(data);
   return (
     <Layout>
       {state.isClicked ? (
