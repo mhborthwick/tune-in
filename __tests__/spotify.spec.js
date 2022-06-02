@@ -134,4 +134,34 @@ describe("Class: Spotify", () => {
       });
     });
   });
+
+  describe("API Routes: 401 response", () => {
+    beforeEach(() => {
+      global.fetch = jest.fn().mockReturnValue({
+        status: 401,
+      });
+    });
+
+    afterEach(() => {
+      global.fetch.mockClear();
+      delete global.fetch;
+    });
+
+    it("should call resetTokensAndExecute if response returns 401", async () => {
+      const data = { track: "come and play in the milky night" };
+      const params = {
+        headers: { authorization: "foo", "content-type": "application/json" },
+        method: "POST",
+        body: JSON.stringify(data),
+      };
+      const client = Spotify.init();
+      jest.spyOn(client, "_getRequestInitOptions").mockReturnValue(params);
+      jest
+        .spyOn(client, "resetTokensAndExecute")
+        .mockImplementationOnce(jest.fn());
+      await client.search(data);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(client.resetTokensAndExecute).toHaveBeenCalledTimes(1);
+    });
+  });
 });
