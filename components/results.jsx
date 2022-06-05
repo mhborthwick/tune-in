@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { Spotify } from "../lib/spotify";
+import { Spotify } from "../lib/interfaces/spotify";
 
 export const Results = ({ cardState }) => {
   const client = Spotify.init();

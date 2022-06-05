@@ -1,5 +1,5 @@
 import { Layout } from "../components/index";
-import { Spotify } from "../lib/spotify";
+import { Spotify } from "../lib/interfaces/spotify";
 
 /**
  * Temp page for testing Spotify API functionality

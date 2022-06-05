@@ -1,20 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
-/**
- * Gets request init options
- *
- * @param {string} accessToken
- */
-function _getRequestInitOptions(accessToken) {
-  return {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  };
-}
+import { getRequestInitOptions } from "../../../lib/helpers/index";
 
 /**
  * Gets genre seeds
@@ -26,7 +11,7 @@ async function _getGenres(accessToken, refresh) {
   const baseUrl = "https://api.spotify.com";
   const endpoint = "/v1/recommendations/available-genre-seeds";
   const api = baseUrl + endpoint;
-  const response = await fetch(api, _getRequestInitOptions(accessToken));
+  const response = await fetch(api, getRequestInitOptions(accessToken, "GET"));
   if (response.status === 401) {
     const baseUrl = "https://accounts.spotify.com";
     const endpoint = "/api/token";

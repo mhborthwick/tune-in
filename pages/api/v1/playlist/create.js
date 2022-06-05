@@ -1,20 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { getRequestInitOptions } from "../../../../lib/helpers/index";
 
 /**
- * Gets request init options
+ * Parses data and returns playlist id
  *
- * @param {string} accessToken
+ * @param {Object} data
+ * @returns {string} id
  */
-function _getRequestInitOptions(accessToken, details) {
-  return {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(details),
-  };
+function _getPlaylistId(data) {
+  const { id } = data;
+  return id;
 }
 
 /**
@@ -31,7 +26,7 @@ async function _createPlaylist(accessToken, refresh, userId, details) {
   const api = baseUrl + endpoint;
   const response = await fetch(
     api,
-    _getRequestInitOptions(accessToken, details)
+    getRequestInitOptions(accessToken, "POST", details)
   );
   if (response.status === 401) {
     const baseUrl = "https://accounts.spotify.com";
@@ -53,17 +48,6 @@ async function _createPlaylist(accessToken, refresh, userId, details) {
   }
   const data = await response.json();
   return data;
-}
-
-/**
- * Parses data and returns playlist id
- *
- * @param {Object} data
- * @returns {string} id
- */
-function _getPlaylistId(data) {
-  const { id } = data;
-  return id;
 }
 
 /**

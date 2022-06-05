@@ -1,21 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
-/**
- * Gets request init options
- *
- * @param {string} accessToken
- */
-function _getRequestInitOptions(accessToken, trackUris) {
-  return {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ uris: trackUris }),
-  };
-}
+import { getRequestInitOptions } from "../../../../lib/helpers/index";
 
 /**
  * Adds tracks to playlist
@@ -29,9 +13,10 @@ async function _addToPlaylist(accessToken, refresh, playlistId, trackUris) {
   const baseUrl = "https://api.spotify.com";
   const endpoint = `/v1/playlists/${playlistId}/tracks`;
   const api = baseUrl + endpoint;
+  const details = { uris: trackUris };
   const response = await fetch(
     api,
-    _getRequestInitOptions(accessToken, trackUris)
+    getRequestInitOptions(accessToken, "POST", details)
   );
   if (response.status === 401) {
     const baseUrl = "https://accounts.spotify.com";
