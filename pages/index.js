@@ -19,7 +19,7 @@ function routeUser(router) {
   if (process.env.NEXT_PUBLIC_CONFIG === "dev") {
     router.push("/client");
   } else {
-    router.push("/select-cards");
+    router.push("/selectCards");
   }
 }
 

@@ -1,3 +1,5 @@
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { Layout } from "../components/index";
 import { Spotify } from "../lib/interfaces/spotify";
 
@@ -6,6 +8,12 @@ import { Spotify } from "../lib/interfaces/spotify";
  * Make sure to access this from homepage
  */
 export default function GetData() {
+  const router = useRouter();
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_CONFIG !== "dev") {
+      router.push("/");
+    }
+  });
   const spotifyClient = Spotify.init();
   return (
     <Layout>
