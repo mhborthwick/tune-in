@@ -1,19 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import {
+  getRequestInitOptions,
+  getNewTokens,
+} from "../../../lib/helpers/index";
 
 /**
- * Gets request init options
+ * Parses data and gets user id
  *
- * @param {string} accessToken
+ * @param {Object} data
+ * @returns {string} id
  */
-function _getRequestInitOptions(accessToken) {
-  return {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  };
+function _getId(data) {
+  const { id } = data;
+  return id;
 }
 
 /**
@@ -26,37 +25,11 @@ async function _getUser(accessToken, refresh) {
   const baseUrl = "https://api.spotify.com";
   const endpoint = "/v1/me";
   const api = baseUrl + endpoint;
-  const response = await fetch(api, _getRequestInitOptions(accessToken));
+  const response = await fetch(api, getRequestInitOptions(accessToken, "GET"));
   if (response.status === 401) {
-    const baseUrl = "https://accounts.spotify.com";
-    const endpoint = "/api/token";
-    const api = baseUrl + endpoint;
-    const response = await fetch(api, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        grant_type: "refresh_token",
-        refresh_token: refresh,
-        client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
-      }),
-    });
-    const data = await response.json();
-    return data;
+    return await getNewTokens(refresh);
   }
   return await response.json();
-}
-
-/**
- * Parses data and gets user id
- *
- * @param {Object} data
- * @returns {string} id
- */
-function _getId(data) {
-  const { id } = data;
-  return id;
 }
 
 /**

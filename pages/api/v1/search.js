@@ -1,4 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import {
+  getRequestInitOptions,
+  getNewTokens,
+} from "../../../lib/helpers/index";
 
 /**
  * Gets query params
@@ -14,19 +18,13 @@ function _getQueryParams(track) {
 }
 
 /**
- * Gets request init options
+ * Parses data and returns track uris
  *
- * @param {string} accessToken
+ * @param {Object} data
+ * @returns {string[]} uris
  */
-function _getRequestInitOptions(accessToken) {
-  return {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  };
+function _getUris(data) {
+  return [data.tracks.items[0].uri];
 }
 
 /**
@@ -42,37 +40,12 @@ async function _search(accessToken, refresh, track) {
   const params = _getQueryParams(track);
   const query = new URLSearchParams(params).toString();
   const api = baseUrl + endpoint + "?" + query;
-  const response = await fetch(api, _getRequestInitOptions(accessToken));
+  const response = await fetch(api, getRequestInitOptions(accessToken, "GET"));
   if (response.status === 401) {
-    const baseUrl = "https://accounts.spotify.com";
-    const endpoint = "/api/token";
-    const api = baseUrl + endpoint;
-    const response = await fetch(api, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        grant_type: "refresh_token",
-        refresh_token: refresh,
-        client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
-      }),
-    });
-    const data = await response.json();
-    return data;
+    return await getNewTokens(refresh);
   }
   const json = await response.json();
   return json;
-}
-
-/**
- * Parses data and returns track uris
- *
- * @param {Object} data
- * @returns {string[]} uris
- */
-function _getUris(data) {
-  return [data.tracks.items[0].uri];
 }
 
 /**

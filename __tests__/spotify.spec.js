@@ -1,4 +1,4 @@
-import { Spotify } from "../lib/spotify";
+import { Spotify } from "../lib/interfaces/spotify";
 
 describe("Class: Spotify", () => {
   describe("Method: init", () => {
